@@ -1,9 +1,10 @@
-{
+﻿{
   "extends": "./conf/tsconfig.base.json",
   "compilerOptions": {
     "types": ["node", "mocha"],
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "rootDir": "."
   },
   "include": ["test/**/*.ts", "scripts/**/*.ts", "conf/**/*.ts"]
 }

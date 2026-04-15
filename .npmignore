@@ -1,7 +1,7 @@
-*
+﻿*
 !dist/kdbxweb.js
 !dist/kdbxweb.min.js
-!dist/types/**/*.d.ts
+!dist/pkg/**
 !LICENSE
 !README.md
 !release-notes.md

@@ -1,4 +1,4 @@
-# KdbxWeb ![CI Checks](https://github.com/keeweb/kdbxweb/workflows/CI%20Checks/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/keeweb/kdbxweb/badge.svg?branch=master)](https://coveralls.io/github/keeweb/kdbxweb?branch=master)
+﻿# KdbxWeb ![CI Checks](https://github.com/keeweb/kdbxweb/workflows/CI%20Checks/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/keeweb/kdbxweb/badge.svg?branch=master)](https://coveralls.io/github/keeweb/kdbxweb?branch=master)
 
 KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 databases (kdbx) in node.js or browser.
 
@@ -421,7 +421,7 @@ kdbxweb.ByteUtils.hexToBytes(str);
 ## Building
 
 > [!NOTE]
-> This project requires node v18.18.0.
+> This project is tested on active Node.js LTS versions: 18, 20 and 22.
 
 <br />
 
@@ -433,11 +433,29 @@ npm run build
 
 <br />
 
+Build output includes:
+
+- npm package modules (`dist/pkg/index.mjs`, `dist/pkg/index.cjs`, `dist/pkg/index.d.ts`)
+- browser UMD bundles (`dist/kdbxweb.js`, `dist/kdbxweb.min.js`)
+
+Quick verification commands:
+
+```sh
+npm run verify:types
+npm run verify:bundle-size
+```
+
+<br />
+
 To run tests:
 
 ```sh
 npm test
 ```  
+
+Contributor docs:
+- [CONTRIBUTING](CONTRIBUTING.md)
+- [Architecture notes](docs/architecture.md)
 
 <br />
 

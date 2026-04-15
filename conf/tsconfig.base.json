@@ -1,7 +1,8 @@
-{
+﻿{
   "compilerOptions": {
     "target": "ES6",
     "module": "commonjs",
+    "moduleResolution": "node",
     "preserveConstEnums": true,
     "strict": true,
     "baseUrl": "../lib",

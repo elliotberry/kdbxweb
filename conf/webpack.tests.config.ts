@@ -1,6 +1,7 @@
-import * as path from 'path';
+﻿import * as path from 'path';
 import { walkSync } from '@nodelib/fs.walk';
 
+const rootDir = process.cwd();
 const files = walkSync('test', { entryFilter: (e) => e.name.endsWith('.ts') });
 const entry = files.map((f) => f.path.replace('test', '.'));
 
@@ -10,12 +11,12 @@ const entry = files.map((f) => f.path.replace('test', '.'));
         path.join(__dirname, '../node_modules')         expect.js
 */
 
-module.exports = {
+export default {
     mode: 'production',
-    context: path.join(__dirname, '../test'),
+    context: path.join(rootDir, 'test'),
     entry,
     output: {
-        path: path.join(__dirname, '../dist'),
+        path: path.join(rootDir, 'dist'),
         filename: 'kdbxweb.test.js',
         libraryTarget: 'umd',
         globalObject: 'this'
@@ -24,7 +25,13 @@ module.exports = {
         rules: [
             {
                 test: /\.ts$/,
-                use: 'ts-loader',
+                use: {
+                    loader: 'ts-loader',
+                    options: {
+                        transpileOnly: true,
+                        configFile: path.join(rootDir, 'tsconfig.json')
+                    }
+                },
                 exclude: /node_modules/
             },
             {
@@ -36,9 +43,9 @@ module.exports = {
     },
     resolve: {
         extensions: ['.ts', '.js'],
-        modules: [path.join(__dirname, '../test'), path.join(__dirname, '../node_modules')],
+        modules: [path.join(rootDir, 'test'), path.join(rootDir, 'node_modules')],
         alias: {
-            '@': path.resolve(__dirname, '../')
+            '@': rootDir
         },
         fallback: {
             console: false,

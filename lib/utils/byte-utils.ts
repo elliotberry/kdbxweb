@@ -1,4 +1,4 @@
-const textEncoder = new TextEncoder();
+﻿const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
 
 type ArrayBufferOrArray = ArrayBuffer | Uint8Array;
@@ -51,7 +51,7 @@ export function bytesToBase64(arr: ArrayBufferOrArray): string {
         }
         return btoa(str);
     } else {
-        const buffer = Buffer.from(arr);
+        const buffer = Buffer.from(intArr);
         return buffer.toString('base64');
     }
 }
@@ -81,11 +81,14 @@ export function arrayToBuffer(arr: ArrayBufferOrArray): ArrayBuffer {
     if (arr instanceof ArrayBuffer) {
         return arr;
     }
-    const ab = arr.buffer;
-    if (arr.byteOffset === 0 && arr.byteLength === ab.byteLength) {
-        return ab;
+    if (
+        arr.buffer instanceof ArrayBuffer &&
+        arr.byteOffset === 0 &&
+        arr.byteLength === arr.buffer.byteLength
+    ) {
+        return arr.buffer;
     }
-    return arr.buffer.slice(arr.byteOffset, arr.byteOffset + arr.byteLength);
+    return new Uint8Array(arr).buffer;
 }
 
 export function zeroBuffer(arr: ArrayBufferOrArray): void {

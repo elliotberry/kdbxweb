@@ -1,19 +1,24 @@
 import * as path from 'path';
-import * as webpack from 'webpack';
+import * as fs from 'fs';
+import webpack from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
+const { BannerPlugin } = webpack;
 
-import * as pkg from '../package.json';
+const rootDir = process.cwd();
+const pkg = JSON.parse(
+    fs.readFileSync(path.join(rootDir, 'package.json'), 'utf8').replace(/^\uFEFF/, '')
+);
 
 const debug = process.argv.indexOf('--mode=development') > 0;
 const license = `opensource.org/licenses/${pkg.license}`;
 const copyright = `(c) ${new Date().getFullYear()} ${pkg.author}, ${license}`;
 const banner = `kdbxweb v${pkg.version}, ${copyright}`;
 
-module.exports = {
-    context: path.join(__dirname, '../lib'),
+export default {
+    context: path.join(rootDir, 'lib'),
     entry: './index.ts',
     output: {
-        path: path.join(__dirname, '../dist'),
+        path: path.join(rootDir, 'dist'),
         filename: 'kdbxweb' + (debug ? '' : '.min') + '.js',
         library: 'kdbxweb',
         libraryTarget: 'umd',
@@ -27,8 +32,10 @@ module.exports = {
                 use: {
                     loader: 'ts-loader',
                     options: {
+                        transpileOnly: true,
                         configFile: path.join(
-                            __dirname,
+                            rootDir,
+                            'conf',
                             `tsconfig.build-${debug ? 'debug' : 'prod'}.json`
                         )
                     }
@@ -38,9 +45,9 @@ module.exports = {
     },
     resolve: {
         extensions: ['.ts', '.js'],
-        modules: [path.join(__dirname, '../util'), path.join(__dirname, '../node_modules')],
+        modules: [path.join(rootDir, 'util'), path.join(rootDir, 'node_modules')],
         alias: {
-            '@': path.resolve(__dirname, '../')
+            '@': rootDir
         },
         fallback: {
             console: false,
@@ -50,7 +57,7 @@ module.exports = {
             zlib: false
         }
     },
-    plugins: [new webpack.BannerPlugin({ banner })],
+    plugins: [new BannerPlugin({ banner })],
     node: {
         __filename: false,
         __dirname: false

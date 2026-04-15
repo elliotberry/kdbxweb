@@ -1,4 +1,4 @@
-import * as CryptoEngine from './crypto-engine';
+﻿import * as CryptoEngine from './crypto-engine';
 import {
     arrayToBuffer,
     base64ToBytes,
@@ -45,8 +45,8 @@ export class ProtectedValue {
     /**
      * Keep in mind that you're passing the ownership of this array, the contents will be destroyed
      */
-    static fromBinary(binary: ArrayBuffer): ProtectedValue {
-        const bytes = new Uint8Array(binary),
+    static fromBinary(binary: ArrayBuffer | Uint8Array): ProtectedValue {
+        const bytes = new Uint8Array(arrayToBuffer(binary)),
             salt = CryptoEngine.random(bytes.length);
         for (let i = 0, len = bytes.length; i < len; i++) {
             bytes[i] ^= salt[i];
@@ -111,7 +111,7 @@ export class ProtectedValue {
     }
 
     clone(): ProtectedValue {
-        return new ProtectedValue(this.value, this.salt);
+        return new ProtectedValue(arrayToBuffer(this.value), arrayToBuffer(this.salt));
     }
 
     get byteLength(): number {

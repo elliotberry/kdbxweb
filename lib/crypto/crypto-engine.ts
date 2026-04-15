@@ -1,4 +1,4 @@
-/*
+﻿/*
     @note           as of node 19, webcrypto is now global.
                     update script to work with node 19, until then, build with node 18
                         - https://nodejs.org/id/blog/announcements/v19-release-announce#stable-webcrypto
@@ -33,8 +33,8 @@ export function sha256(data: ArrayBuffer): Promise<ArrayBuffer> {
     } else {
         return new Promise((resolve) => {
             const sha = nodeCrypto.createHash('sha256');
-            const hash = sha.update(Buffer.from(data)).digest();
-            resolve(hash.buffer);
+            const hash = sha.update(new Uint8Array(data)).digest();
+            resolve(arrayToBuffer(new Uint8Array(hash)));
         });
     }
 }
@@ -48,8 +48,8 @@ export function sha512(data: ArrayBuffer): Promise<ArrayBuffer> {
     } else {
         return new Promise((resolve) => {
             const sha = nodeCrypto.createHash('sha512');
-            const hash = sha.update(Buffer.from(data)).digest();
-            resolve(hash.buffer);
+            const hash = sha.update(new Uint8Array(data)).digest();
+            resolve(arrayToBuffer(new Uint8Array(hash)));
         });
     }
 }
@@ -64,9 +64,9 @@ export function hmacSha256(key: ArrayBuffer, data: ArrayBuffer): Promise<ArrayBu
             });
     } else {
         return new Promise((resolve) => {
-            const hmac = nodeCrypto.createHmac('sha256', Buffer.from(key));
-            const hash = hmac.update(Buffer.from(data)).digest();
-            resolve(hash.buffer);
+            const hmac = nodeCrypto.createHmac('sha256', new Uint8Array(key));
+            const hash = hmac.update(new Uint8Array(data)).digest();
+            resolve(arrayToBuffer(new Uint8Array(hash)));
         });
     }
 }
@@ -129,11 +129,15 @@ class AesCbcNode extends AesCbc {
         return Promise.resolve().then(() => {
             const cipher = nodeCrypto.createCipheriv(
                 'aes-256-cbc',
-                Buffer.from(this.key),
-                Buffer.from(iv)
+                new Uint8Array(this.key),
+                new Uint8Array(iv)
             );
-            const block = cipher.update(Buffer.from(data));
-            return arrayToBuffer(Buffer.concat([block, cipher.final()]));
+            const block = cipher.update(new Uint8Array(data));
+            const finalBlock = cipher.final();
+            const encrypted = new Uint8Array(block.byteLength + finalBlock.byteLength);
+            encrypted.set(block, 0);
+            encrypted.set(finalBlock, block.byteLength);
+            return arrayToBuffer(encrypted);
         });
     }
 
@@ -142,11 +146,15 @@ class AesCbcNode extends AesCbc {
             .then(() => {
                 const cipher = nodeCrypto.createDecipheriv(
                     'aes-256-cbc',
-                    Buffer.from(this.key),
-                    Buffer.from(iv)
+                    new Uint8Array(this.key),
+                    new Uint8Array(iv)
                 );
-                const block = cipher.update(Buffer.from(data));
-                return arrayToBuffer(Buffer.concat([block, cipher.final()]));
+                const block = cipher.update(new Uint8Array(data));
+                const finalBlock = cipher.final();
+                const decrypted = new Uint8Array(block.byteLength + finalBlock.byteLength);
+                decrypted.set(block, 0);
+                decrypted.set(finalBlock, block.byteLength);
+                return arrayToBuffer(decrypted);
             })
             .catch(() => {
                 throw new KdbxError(ErrorCodes.InvalidKey, 'invalid key');
