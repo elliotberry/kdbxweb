@@ -1,4 +1,4 @@
-import expect from 'expect.js';
+﻿import expect from 'expect.js';
 import {
     BinaryStream,
     ByteUtils,
@@ -367,7 +367,7 @@ describe('KdbxHeader', () => {
     it('throws error for bad signature', () => {
         expect(() => {
             KdbxHeader.read(
-                new BinaryStream(ByteUtils.hexToBytes('0000000000000000').buffer),
+                new BinaryStream(ByteUtils.arrayToBuffer(ByteUtils.hexToBytes('0000000000000000'))),
                 new KdbxContext({ kdbx })
             );
         }).to.throwException((e) => {
@@ -378,7 +378,9 @@ describe('KdbxHeader', () => {
     it('throws error for bad version', () => {
         expect(() => {
             KdbxHeader.read(
-                new BinaryStream(ByteUtils.hexToBytes('03d9a29a67fb4bb501000500').buffer),
+                new BinaryStream(
+                    ByteUtils.arrayToBuffer(ByteUtils.hexToBytes('03d9a29a67fb4bb501000500'))
+                ),
                 new KdbxContext({ kdbx })
             );
         }).to.throwException((e) => {
@@ -390,7 +392,9 @@ describe('KdbxHeader', () => {
         expect(() => {
             KdbxHeader.read(
                 new BinaryStream(
-                    ByteUtils.hexToBytes('03d9a29a67fb4bb501000400020100000031c1f2e6bf').buffer
+                    ByteUtils.arrayToBuffer(
+                        ByteUtils.hexToBytes('03d9a29a67fb4bb501000400020100000031c1f2e6bf')
+                    )
                 ),
                 new KdbxContext({ kdbx })
             );
@@ -404,7 +408,9 @@ describe('KdbxHeader', () => {
         expect(() => {
             KdbxHeader.read(
                 new BinaryStream(
-                    ByteUtils.hexToBytes('03d9a29a67fb4bb5010004000320000000011111111').buffer
+                    ByteUtils.arrayToBuffer(
+                        ByteUtils.hexToBytes('03d9a29a67fb4bb5010004000320000000011111111')
+                    )
                 ),
                 new KdbxContext({ kdbx })
             );

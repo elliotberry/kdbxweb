@@ -1,4 +1,4 @@
-﻿{
+{
   "extends": "./conf/tsconfig.base.json",
   "compilerOptions": {
     "types": ["node", "mocha"],

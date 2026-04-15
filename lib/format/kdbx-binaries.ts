@@ -1,4 +1,4 @@
-import * as CryptoEngine from './../crypto/crypto-engine';
+﻿import * as CryptoEngine from './../crypto/crypto-engine';
 import { ProtectedValue } from '../crypto/protected-value';
 import { arrayToBuffer, bytesToHex } from '../utils/byte-utils';
 
@@ -6,9 +6,9 @@ export type KdbxBinaryRef = { ref: string };
 export type KdbxBinaryRefWithValue = { ref: string; value: KdbxBinary };
 export type KdbxBinaryWithHash = { hash: string; value: KdbxBinary };
 
-export type KdbxBinary = ProtectedValue | ArrayBuffer;
+export type KdbxBinary = ProtectedValue | ArrayBuffer | Uint8Array;
 export type KdbxBinaryOrRef = KdbxBinary | KdbxBinaryRef;
-export type KdbxBinaryIn = KdbxBinary | Uint8Array;
+export type KdbxBinaryIn = KdbxBinary;
 
 export class KdbxBinaries {
     // temporary map used during database loading

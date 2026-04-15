@@ -29,6 +29,9 @@ export default {
                     loader: 'ts-loader',
                     options: {
                         transpileOnly: true,
+                        compilerOptions: {
+                            ignoreDeprecations: '6.0'
+                        },
                         configFile: path.join(rootDir, 'tsconfig.json')
                     }
                 },
@@ -37,7 +40,7 @@ export default {
             {
                 test: /argon2-asm/,
                 loader: 'exports-loader',
-                options: { type: 'module', exports: 'default Module' }
+                options: { type: 'commonjs', exports: 'single Module' }
             }
         ]
     },

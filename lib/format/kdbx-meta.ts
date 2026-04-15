@@ -1,4 +1,4 @@
-import { KdbxUuid } from './kdbx-uuid';
+﻿import { KdbxUuid } from './kdbx-uuid';
 import * as XmlUtils from '../utils/xml-utils';
 import * as XmlNames from '../defs/xml-names';
 import { KdbxCustomData, KdbxCustomDataItem, KdbxCustomDataMap } from './kdbx-custom-data';
@@ -33,7 +33,7 @@ export interface KdbxMemoryProtection {
 }
 
 export interface KdbxCustomIcon {
-    data: ArrayBuffer;
+    data: ArrayBuffer | Uint8Array;
     name?: string;
     lastModified?: Date;
 }

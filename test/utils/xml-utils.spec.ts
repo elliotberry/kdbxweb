@@ -1,4 +1,4 @@
-import expect from 'expect.js';
+﻿import expect from 'expect.js';
 import {
     ByteUtils,
     Consts,
@@ -665,7 +665,7 @@ describe('XmlUtils', () => {
 
                 getSalt(): ArrayBuffer {
                     count++;
-                    return new Uint8Array([count, count, count]);
+                    return new Uint8Array([count, count, count]).buffer as ArrayBuffer;
                 }
             }
 
@@ -723,7 +723,7 @@ describe('XmlUtils', () => {
 
                 getSalt(): ArrayBuffer {
                     count++;
-                    return new Uint8Array([count, count, count]);
+                    return new Uint8Array([count, count, count]).buffer as ArrayBuffer;
                 }
             }
 

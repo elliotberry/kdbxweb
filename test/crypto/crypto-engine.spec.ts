@@ -1,4 +1,4 @@
-import expect from 'expect.js';
+﻿import expect from 'expect.js';
 import { ByteUtils, CryptoEngine } from '../../lib';
 
 const isNode = !!global.process?.versions?.node;
@@ -16,15 +16,21 @@ function toHex(bytes: ArrayBuffer) {
 
 function useDefaultImpl() {
     if (isNode) {
-        // @ts-ignore
-        global.crypto = undefined;
+        Object.defineProperty(global, 'crypto', {
+            configurable: true,
+            writable: true,
+            value: undefined
+        });
     }
 }
 
 function useSubtleMock() {
     if (isNode) {
-        // @ts-ignore
-        global.crypto = require('../test-support/subtle-mock-node').SubtleMockNode;
+        Object.defineProperty(global, 'crypto', {
+            configurable: true,
+            writable: true,
+            value: require('../test-support/subtle-mock-node').SubtleMockNode
+        });
     }
 }
 
@@ -122,7 +128,12 @@ describe('CryptoEngine', () => {
             expect(rand1.length).to.be(20);
             const rand2 = CryptoEngine.random(20);
             expect(rand2.length).to.be(20);
-            expect(ByteUtils.arrayBufferEquals(rand1, rand2)).to.be(false);
+            expect(
+                ByteUtils.arrayBufferEquals(
+                    ByteUtils.arrayToBuffer(rand1),
+                    ByteUtils.arrayToBuffer(rand2)
+                )
+            ).to.be(false);
             const rand3 = CryptoEngine.random(10);
             expect(rand3.length).to.be(10);
         });
@@ -251,9 +262,9 @@ describe('CryptoEngine', () => {
         it('encrypts with chacha20', () => {
             useDefaultImpl();
             return CryptoEngine.chacha20(
-                ByteUtils.hexToBytes(data),
-                ByteUtils.hexToBytes(key),
-                ByteUtils.hexToBytes(iv12)
+                ByteUtils.arrayToBuffer(ByteUtils.hexToBytes(data)),
+                ByteUtils.arrayToBuffer(ByteUtils.hexToBytes(key)),
+                ByteUtils.arrayToBuffer(ByteUtils.hexToBytes(iv12))
             ).then((result) => {
                 expect(toHex(result)).to.be(exp12);
             });
@@ -262,9 +273,9 @@ describe('CryptoEngine', () => {
         it('encrypts with short iv', () => {
             useDefaultImpl();
             return CryptoEngine.chacha20(
-                ByteUtils.hexToBytes(data),
-                ByteUtils.hexToBytes(key),
-                ByteUtils.hexToBytes(iv8)
+                ByteUtils.arrayToBuffer(ByteUtils.hexToBytes(data)),
+                ByteUtils.arrayToBuffer(ByteUtils.hexToBytes(key)),
+                ByteUtils.arrayToBuffer(ByteUtils.hexToBytes(iv8))
             ).then((result) => {
                 expect(toHex(result)).to.be(exp8);
             });

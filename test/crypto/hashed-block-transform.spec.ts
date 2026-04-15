@@ -1,4 +1,4 @@
-import expect from 'expect.js';
+﻿import expect from 'expect.js';
 import { ByteUtils, Consts, HashedBlockTransform, KdbxError } from '../../lib';
 
 describe('HashedBlockTransform', () => {
@@ -6,8 +6,8 @@ describe('HashedBlockTransform', () => {
         const src = new Uint8Array([1, 2, 3, 4, 5]);
         return HashedBlockTransform.encrypt(src.buffer).then((enc) => {
             return HashedBlockTransform.decrypt(enc).then((dec) => {
-                dec = new Uint8Array(dec);
-                expect(dec).to.be.eql(src);
+                const decBytes = new Uint8Array(dec);
+                expect(decBytes).to.be.eql(src);
             });
         });
     });

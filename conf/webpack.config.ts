@@ -1,4 +1,4 @@
-import * as path from 'path';
+﻿import * as path from 'path';
 import * as fs from 'fs';
 import webpack from 'webpack';
 import TerserPlugin from 'terser-webpack-plugin';
@@ -33,6 +33,9 @@ export default {
                     loader: 'ts-loader',
                     options: {
                         transpileOnly: true,
+                        compilerOptions: {
+                            ignoreDeprecations: '6.0'
+                        },
                         configFile: path.join(
                             rootDir,
                             'conf',

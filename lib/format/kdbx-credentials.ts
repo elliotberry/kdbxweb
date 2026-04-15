@@ -96,7 +96,7 @@ export class KdbxCredentials {
                     );
                 }
             } catch (e) {
-                return CryptoEngine.sha256(keyFile).then((hash) => {
+                return CryptoEngine.sha256(arrayToBuffer(keyFile)).then((hash) => {
                     this.keyFileHash = ProtectedValue.fromBinary(hash);
                 });
             }
@@ -108,7 +108,7 @@ export class KdbxCredentials {
                 case 2: {
                     const keyFileData = hexToBytes(dataEl.textContent.replace(/\s+/g, ''));
                     const keyFileDataHash = dataEl.getAttribute('Hash');
-                    return CryptoEngine.sha256(keyFileData).then((computedHash) => {
+                    return CryptoEngine.sha256(arrayToBuffer(keyFileData)).then((computedHash) => {
                         const computedHashStr = bytesToHex(
                             new Uint8Array(computedHash).subarray(0, 4)
                         ).toUpperCase();
@@ -194,13 +194,13 @@ export class KdbxCredentials {
         return KdbxCredentials.createKeyFileWithHash(keyBytes, version);
     }
 
-    static createKeyFileWithHash(keyBytes: ArrayBuffer, version = 1): Promise<Uint8Array> {
+    static createKeyFileWithHash(keyBytes: ArrayBuffer | Uint8Array, version = 1): Promise<Uint8Array> {
         const xmlVersion = version === 2 ? '2.0' : '1.00';
         const dataPadding = '        ';
         let makeDataElPromise;
         if (version === 2) {
             const keyDataPadding = dataPadding + '    ';
-            makeDataElPromise = CryptoEngine.sha256(keyBytes).then((computedHash) => {
+            makeDataElPromise = CryptoEngine.sha256(arrayToBuffer(keyBytes)).then((computedHash) => {
                 const keyHash = bytesToHex(
                     new Uint8Array(computedHash).subarray(0, 4)
                 ).toUpperCase();

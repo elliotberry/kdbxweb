@@ -1,4 +1,4 @@
-import { KdbxError } from '../errors/kdbx-error';
+﻿import { KdbxError } from '../errors/kdbx-error';
 import { ErrorCodes } from '../defs/consts';
 import { arrayToBuffer, bytesToString, stringToBytes } from './byte-utils';
 import { Int64 } from './int64';
@@ -17,7 +17,14 @@ export enum ValueType {
     Bytes = 0x42
 }
 
-export type VarDictionaryAnyValue = number | Int64 | boolean | string | ArrayBuffer | undefined;
+export type VarDictionaryAnyValue =
+    | number
+    | Int64
+    | boolean
+    | string
+    | ArrayBuffer
+    | Uint8Array
+    | undefined;
 
 interface VarDictionaryItemInt {
     type: ValueType.UInt32 | ValueType.Int32;

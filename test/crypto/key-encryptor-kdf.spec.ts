@@ -1,4 +1,4 @@
-import expect from 'expect.js';
+﻿import expect from 'expect.js';
 import { ByteUtils, Consts, CryptoEngine, Int64, KeyEncryptorKdf, VarDictionary } from '../../lib';
 import { ValueType } from '../../lib/utils/var-dictionary';
 
@@ -208,7 +208,7 @@ describe('KeyEncryptorKdf', () => {
         const result = 'af0be2c639224ad37bd2bc7967d6c3303a8a6d4b7813718918a66bde96dc3132';
         params.set('S', ValueType.Bytes, salt);
         params.set('R', ValueType.Int64, new Int64(2));
-        return KeyEncryptorKdf.encrypt(key, params).then((res) => {
+        return KeyEncryptorKdf.encrypt(ByteUtils.arrayToBuffer(key), params).then((res) => {
             expect(ByteUtils.bytesToHex(res)).to.be(result);
         });
     });

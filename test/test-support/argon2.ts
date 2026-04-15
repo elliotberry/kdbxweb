@@ -1,4 +1,4 @@
-import { Argon2Type, Argon2Version } from '../../lib/crypto/crypto-engine';
+﻿import { Argon2Type, Argon2Version } from '../../lib/crypto/crypto-engine';
 
 export function argon2(
     password: ArrayBuffer,
@@ -48,7 +48,7 @@ export function argon2(
         Module._free(salt);
         Module._free(hash);
         Module._free(encoded);
-        return Promise.resolve(hashArr);
+        return Promise.resolve(hashArr.buffer as ArrayBuffer);
     } catch (e) {
         return Promise.reject(e);
     }

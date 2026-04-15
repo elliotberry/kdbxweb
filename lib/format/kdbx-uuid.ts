@@ -1,4 +1,4 @@
-import { base64ToBytes, bytesToBase64 } from '../utils/byte-utils';
+﻿import { base64ToBytes, bytesToBase64 } from '../utils/byte-utils';
 import { ErrorCodes } from '../defs/consts';
 import { KdbxError } from '../errors/kdbx-error';
 import * as CryptoEngine from '../crypto/crypto-engine';
@@ -10,16 +10,19 @@ export class KdbxUuid {
     readonly id: string;
     readonly empty: boolean;
 
-    constructor(ab?: ArrayBuffer | string) {
+    constructor(ab?: ArrayBuffer | Uint8Array | string) {
+        let bytes: ArrayBuffer | Uint8Array;
         if (ab === undefined) {
-            ab = new ArrayBuffer(UuidLength);
+            bytes = new ArrayBuffer(UuidLength);
         } else if (typeof ab === 'string') {
-            ab = base64ToBytes(ab);
+            bytes = base64ToBytes(ab);
+        } else {
+            bytes = ab;
         }
-        if (ab.byteLength !== UuidLength) {
-            throw new KdbxError(ErrorCodes.FileCorrupt, `bad UUID length: ${ab.byteLength}`);
+        if (bytes.byteLength !== UuidLength) {
+            throw new KdbxError(ErrorCodes.FileCorrupt, `bad UUID length: ${bytes.byteLength}`);
         }
-        this.id = bytesToBase64(ab);
+        this.id = bytesToBase64(bytes);
         this.empty = this.id === EmptyUuidStr;
     }
 
@@ -27,7 +30,7 @@ export class KdbxUuid {
         return (other && other.toString() === this.toString()) || false;
     }
 
-    get bytes(): ArrayBuffer {
+    get bytes(): Uint8Array {
         return this.toBytes();
     }
 
@@ -43,7 +46,7 @@ export class KdbxUuid {
         return this.id;
     }
 
-    toBytes(): ArrayBuffer {
+    toBytes(): Uint8Array {
         return base64ToBytes(this.id);
     }
 }

@@ -1,4 +1,4 @@
-import expect from 'expect.js';
+﻿import expect from 'expect.js';
 import { ByteUtils, Consts, HmacBlockTransform, KdbxError } from '../../lib';
 
 describe('HmacBlockTransform', () => {
@@ -10,8 +10,8 @@ describe('HmacBlockTransform', () => {
         const src = new Uint8Array([1, 2, 3, 4, 5]);
         return HmacBlockTransform.encrypt(src.buffer, key).then((enc) => {
             return HmacBlockTransform.decrypt(enc, key).then((dec) => {
-                dec = new Uint8Array(dec);
-                expect(dec).to.be.eql(src);
+                const decBytes = new Uint8Array(dec);
+                expect(decBytes).to.be.eql(src);
             });
         });
     });

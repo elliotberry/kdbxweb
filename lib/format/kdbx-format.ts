@@ -1,4 +1,4 @@
-import { gzipSync, gunzipSync } from 'fflate';
+﻿import { gzipSync, gunzipSync } from 'fflate';
 import { Kdbx } from './kdbx';
 import { CipherId, CompressionAlgorithm, ErrorCodes } from '../defs/consts';
 import { KdbxError } from '../errors/kdbx-error';
@@ -244,7 +244,7 @@ export class KdbxFormat {
             const newData = new Uint8Array(data.byteLength + ssb.length);
             newData.set(ssb);
             newData.set(new Uint8Array(data), ssb.length);
-            data = newData;
+            data = arrayToBuffer(newData);
             return this.getMasterKeyV3().then((masterKey) => {
                 return this.encryptData(arrayToBuffer(data), masterKey).then((data) => {
                     zeroBuffer(masterKey);
@@ -274,7 +274,7 @@ export class KdbxFormat {
                     transformRounds
                 ).then((encKey) => {
                     zeroBuffer(credHash);
-                    return CryptoEngine.sha256(encKey).then((keyHash) => {
+                    return CryptoEngine.sha256(arrayToBuffer(encKey)).then((keyHash) => {
                         zeroBuffer(encKey);
 
                         const chalRespLength = chalResp ? chalResp.byteLength : 0;

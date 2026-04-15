@@ -12,9 +12,9 @@ export class ProtectedValue {
     readonly value: Uint8Array;
     readonly salt: Uint8Array;
 
-    constructor(value: ArrayBuffer, salt: ArrayBuffer) {
-        this.value = new Uint8Array(value);
-        this.salt = new Uint8Array(salt);
+    constructor(value: ArrayBuffer | Uint8Array, salt: ArrayBuffer | Uint8Array) {
+        this.value = new Uint8Array(arrayToBuffer(value));
+        this.salt = new Uint8Array(arrayToBuffer(salt));
     }
 
     toString(): string {
@@ -100,8 +100,8 @@ export class ProtectedValue {
         return bytes;
     }
 
-    setSalt(newSalt: ArrayBuffer): void {
-        const newSaltArr = new Uint8Array(newSalt);
+    setSalt(newSalt: ArrayBuffer | Uint8Array): void {
+        const newSaltArr = new Uint8Array(arrayToBuffer(newSalt));
         const value = this.value,
             salt = this.salt;
         for (let i = 0, len = value.length; i < len; i++) {

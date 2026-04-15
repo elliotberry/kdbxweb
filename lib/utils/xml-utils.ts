@@ -1,4 +1,4 @@
-import { gunzipSync } from 'fflate';
+﻿import { gunzipSync } from 'fflate';
 import { KdbxError } from '../errors/kdbx-error';
 import { ErrorCodes } from '../defs/consts';
 import * as XmlNames from '../defs/xml-names';
@@ -26,16 +26,8 @@ function createDOMParser() {
     }
 
     const parserArg = {
-        errorHandler: {
-            warning: (e: Error) => {
-                throw e;
-            },
-            error: (e: Error) => {
-                throw e;
-            },
-            fatalError: (e: Error) => {
-                throw e;
-            }
+        onError: (_level: string, message: string) => {
+            throw new Error(message);
         }
     };
 
