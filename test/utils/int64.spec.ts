@@ -1,4 +1,4 @@
-import expect from 'expect.js';
+import expect from '../test-support/expect';
 import { Int64 } from '../../lib';
 
 describe('Int64', () => {

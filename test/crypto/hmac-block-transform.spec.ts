@@ -1,4 +1,4 @@
-﻿import expect from 'expect.js';
+﻿import expect from '../test-support/expect';
 import { ByteUtils, Consts, HmacBlockTransform, KdbxError } from '../../lib';
 
 describe('HmacBlockTransform', () => {

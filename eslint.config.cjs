@@ -24,12 +24,10 @@ const parserTS = require('@typescript-eslint/parser');
     Plugins
 */
 
-const pluginChaiFriendly = require('eslint-plugin-chai-friendly');
 const pluginImport = require('eslint-plugin-import');
 const pluginNode = require('eslint-plugin-n');
 const pluginPrettier = require('eslint-plugin-prettier');
 const pluginPromise = require('eslint-plugin-promise');
-const mochaPlugin = require('eslint-plugin-mocha');
 const tsPlugin = require('@typescript-eslint/eslint-plugin');
 
 /*
@@ -63,12 +61,10 @@ module.exports = [{
         '**/test-support',
         '**/eslint.config.cjs'
     ],
-}, ...compat.extends('eslint:recommended', 'plugin:prettier/recommended', 'plugin:chai-friendly/recommended'), {
+}, ...compat.extends('eslint:recommended', 'plugin:prettier/recommended'), {
         files: ['**/*.{ts,tsx}'],
         plugins: {
-            'chai-friendly': pluginChaiFriendly,
             'import': pluginImport,
-            'mocha': mochaPlugin,
             'n': pluginNode,
             'prettier': pluginPrettier,
             'promise': pluginPromise,
@@ -95,7 +91,6 @@ module.exports = [{
                 ...globals.node,
                 ...globals.jest,
                 ...globals.jquery,
-                ...globals.mocha,
                 _: true,
                 $: true
             },
@@ -159,12 +154,6 @@ module.exports = [{
                     'message': 'Prefer named exports'
                 }
             ],
-
-            /*
-                @plugin         eslint-plugin-chai-friendly
-            */
-
-            'chai-friendly/no-unused-expressions': 2,
 
             /*
                 @plugin         eslint-plugin-import
@@ -261,6 +250,15 @@ module.exports = [{
                 project: [
                     'tsconfig.json'
                 ]
+            },
+            globals: {
+                describe: 'readonly',
+                it: 'readonly',
+                test: 'readonly',
+                before: 'readonly',
+                beforeEach: 'readonly',
+                after: 'readonly',
+                afterEach: 'readonly'
             },
         },
         rules: {

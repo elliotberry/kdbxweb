@@ -1,4 +1,4 @@
-﻿import expect from 'expect.js';
+﻿import expect from '../test-support/expect';
 import { ByteUtils, CryptoEngine } from '../../lib';
 
 const isNode = !!global.process?.versions?.node;
@@ -283,15 +283,51 @@ describe('CryptoEngine', () => {
     });
 
     describe('argon2', () => {
-        it('throws error if argon2 is not implemented', () => {
+        it('calculates argon2d with built-in implementation', () => {
             useDefaultImpl();
             return CryptoEngine.argon2(
-                new ArrayBuffer(0),
-                new ArrayBuffer(0),
-                0,
-                0,
-                0,
-                0,
+                fromHex('01020304'),
+                fromHex('05060708090a0b0c0d0e0f10'),
+                64,
+                2,
+                32,
+                1,
+                CryptoEngine.Argon2TypeArgon2d,
+                0x13
+            ).then((hash) => {
+                expect(toHex(hash)).to.be(
+                    'd6de57359bc71ceb1328d017acb9fe2c05d37a92af1f909ca412b125e1b15bbb'
+                );
+            });
+        });
+
+        it('calculates argon2id with built-in implementation', () => {
+            useDefaultImpl();
+            return CryptoEngine.argon2(
+                fromHex('01020304'),
+                fromHex('05060708090a0b0c0d0e0f10'),
+                64,
+                2,
+                32,
+                1,
+                CryptoEngine.Argon2TypeArgon2id,
+                0x13
+            ).then((hash) => {
+                expect(toHex(hash)).to.be(
+                    'a24f2c7181e3e306aa0c85531645a1cb3a2a85fb9342ba7c25d0136f39829043'
+                );
+            });
+        });
+
+        it('throws error for unsupported argon2 version', () => {
+            useDefaultImpl();
+            return CryptoEngine.argon2(
+                fromHex('01020304'),
+                fromHex('05060708090a0b0c0d0e0f10'),
+                64,
+                2,
+                32,
+                1,
                 CryptoEngine.Argon2TypeArgon2d,
                 0x10
             )
@@ -299,7 +335,7 @@ describe('CryptoEngine', () => {
                     throw 'No error generated';
                 })
                 .catch((e) => {
-                    expect(e.message).to.be('Error NotImplemented: argon2 not implemented');
+                    expect(e.message).to.be('Error Unsupported: argon2 version');
                 });
         });
     });

@@ -1,4 +1,4 @@
-import expect from 'expect.js';
+import expect from '../test-support/expect';
 import { Salsa20 } from '../../lib';
 
 describe('Salsa20', () => {

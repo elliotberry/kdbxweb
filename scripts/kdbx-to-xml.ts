@@ -1,8 +1,5 @@
 import * as fs from 'fs';
-import { Credentials, CryptoEngine, Kdbx, ProtectedValue, XmlUtils } from '../lib';
-import { argon2 } from '../test/test-support/argon2';
-
-CryptoEngine.setArgon2Impl(argon2);
+import { Credentials, Kdbx, ProtectedValue, XmlUtils } from '../lib';
 
 if (process.argv.length < 4) {
     console.log('Usage: npm run script:kdbx-to-xml path/to-file.kdbx password');

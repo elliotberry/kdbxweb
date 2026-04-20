@@ -44,7 +44,7 @@
         "pack:dist-debug": "TS_NODE_COMPILER_OPTIONS='{\"ignoreDeprecations\":\"6.0\"}' webpack --progress --mode=development --devtool source-map --config conf/webpack.config.ts --mode development",
         "webpack-stats": "TS_NODE_COMPILER_OPTIONS='{\"ignoreDeprecations\":\"6.0\"}' webpack --mode=production --json --config conf/webpack.config.ts > dist/stats.json",
         "pack:tests": "TS_NODE_COMPILER_OPTIONS='{\"ignoreDeprecations\":\"6.0\"}' webpack --progress --config conf/webpack.tests.config.ts",
-        "tests:node": "TS_NODE_COMPILER_OPTIONS='{\"ignoreDeprecations\":\"6.0\"}' mocha --require ts-node/register --recursive --reporter spec test/**/*.spec.ts",
+        "tests:node": "TS_NODE_COMPILER_OPTIONS='{\"ignoreDeprecations\":\"6.0\"}' node --require ts-node/register/transpile-only --require ./test/test-support/node-test-globals.ts --test --test-concurrency=1 test/**/*.spec.ts",
         "tests:cover": "nyc --reporter=lcov npm run tests:node",
         "verify:artifacts": "node scripts/check-artifacts.mjs",
         "verify:bundle-size": "node scripts/check-bundle-size.mjs",
@@ -68,24 +68,19 @@
         "@cyclonedx/cyclonedx-npm": "^4.2.1",
         "@istanbuljs/nyc-config-typescript": "^1.0.2",
         "@nodelib/fs.walk": "^3.0.1",
-        "@types/expect.js": "^0.3.32",
-        "@types/mocha": "^10.0.10",
+        "@types/node": "^25.6.0",
         "@types/terser-webpack-plugin": "^5.2.0",
         "@typescript-eslint/eslint-plugin": "^8.58.2",
         "@typescript-eslint/parser": "^8.58.2",
         "base64-loader": "^1.0.0",
         "eslint": "^9.39.1",
         "eslint-config-prettier": "^10.1.8",
-        "eslint-plugin-chai-friendly": "^1.2.0",
         "eslint-plugin-import": "^2.32.0",
-        "eslint-plugin-mocha": "^11.2.0",
         "eslint-plugin-n": "17.24.0",
         "eslint-plugin-prettier": "^5.5.5",
         "eslint-plugin-promise": "^7.2.1",
         "eslint-plugin-standard": "^5.0.0",
-        "expect.js": "^0.3.1",
         "exports-loader": "^5.0.0",
-        "mocha": "^11.7.5",
         "nyc": "^18.0.0",
         "prettier": "^3.8.3",
         "prettier-eslint": "^16.4.2",
@@ -103,6 +98,7 @@
     },
     "dependencies": {
         "@xmldom/xmldom": "^0.9.9",
-        "fflate": "^0.8.2"
+        "fflate": "^0.8.2",
+        "hash-wasm": "^4.12.0"
     }
 }

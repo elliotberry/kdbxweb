@@ -7,7 +7,7 @@
 
 // @ts-nocheck
 
-import expect from 'expect.js';
+import expect from '../test-support/expect';
 import { BinaryStream, ByteUtils, Consts, Int64, VarDictionary } from '../../lib';
 import { ValueType } from '../../lib/utils/var-dictionary';
 

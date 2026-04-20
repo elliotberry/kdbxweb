@@ -1,7 +1,4 @@
-import { Credentials, CryptoEngine, Kdbx, ProtectedValue } from '../lib';
-import { argon2 } from '../test/test-support/argon2';
-
-CryptoEngine.setArgon2Impl(argon2);
+import { Credentials, Kdbx, ProtectedValue } from '../lib';
 
 const credentials = new Credentials(ProtectedValue.fromString(''));
 

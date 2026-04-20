@@ -99,20 +99,16 @@ Supported formats are Kdbx3 and Kdbx4, current KeePass file format. Old kdb file
 
 ## Kdbx4
 
-Kdbx4 has introduced Argon2, a new hashing function. Due to complex calculations, you have to implement it manually and export to kdbxweb, if you want to support such files. Here's how:
+Kdbx4 introduced Argon2 as a key derivation function. kdbxweb now includes a built-in Argon2 implementation via [`hash-wasm`](https://www.npmjs.com/package/hash-wasm), so Kdbx4 files work without extra setup.
+
+If you want to provide your own Argon2 backend (for example, platform-specific tuning), you can still override it:
 
 ```ts
-kdbxweb.CryptoEngine.setArgon2Impl((password, salt,
-    memory, iterations, length, parallelism, type, version
-) => {
-    // your implementation makes hash (Uint8Array, 'length' bytes)
+kdbxweb.CryptoEngine.setArgon2Impl((password, salt, memory, iterations, length, parallelism, type, version) => {
+    // your implementation returns Promise<ArrayBuffer | Uint8Array>
     return Promise.resolve(hash);
 });
 ```
-
-You can find an implementation example in [tests](https://github.com/keeweb/kdbxweb/blob/master/test/test-support/argon2.ts).  
-
-It's not compiled into the library because there's no universal way to provide a fast implementation, so it's up to you to choose the best one.
 
 <br />
 
@@ -467,6 +463,7 @@ Contributor docs:
 
 kdbxweb includes these 3rd party libraries:
 - [fflate](https://github.com/101arrowz/fflate)
+- [hash-wasm](https://github.com/Daninet/hash-wasm)
 - [xmldom](https://github.com/xmldom/xmldom)
 
 <br />

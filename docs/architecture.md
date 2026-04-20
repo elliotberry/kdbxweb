@@ -19,7 +19,9 @@
 
 ## Argon2 Integration Point
 
-Argon2 implementation is intentionally external. Consumers register it through:
+Argon2 is provided by default through `hash-wasm` in `CryptoEngine`.
+
+Consumers can still override it through:
 
 ```ts
 CryptoEngine.setArgon2Impl((password, salt, memory, iterations, length, parallelism, type, version) => {
@@ -27,4 +29,4 @@ CryptoEngine.setArgon2Impl((password, salt, memory, iterations, length, parallel
 });
 ```
 
-This keeps runtime flexibility for browser, Node, and wasm/native backends without hardcoding one Argon2 dependency into the package.
+This keeps runtime flexibility for browser, Node, and custom wasm/native backends while offering a zero-config default.

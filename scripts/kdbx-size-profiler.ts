@@ -1,16 +1,5 @@
 import * as fs from 'fs';
-import {
-    Credentials,
-    CryptoEngine,
-    Kdbx,
-    KdbxBinaries,
-    KdbxEntry,
-    KdbxGroup,
-    ProtectedValue
-} from '../lib';
-import { argon2 } from '../test/test-support/argon2';
-
-CryptoEngine.setArgon2Impl(argon2);
+import { Credentials, Kdbx, KdbxBinaries, KdbxEntry, KdbxGroup, ProtectedValue } from '../lib';
 
 if (process.argv.length < 4) {
     console.log('Usage: npm run script:kdbx-size-profiler path/to-file.kdbx password');

@@ -1,4 +1,4 @@
-import expect from 'expect.js';
+import expect from '../test-support/expect';
 import { KdbxUuid } from '../../lib';
 
 describe('KdbxUuid', () => {

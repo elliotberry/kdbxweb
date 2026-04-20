@@ -14,6 +14,7 @@ import { ErrorCodes } from '../defs/consts';
 import { arrayToBuffer, hexToBytes } from '../utils/byte-utils';
 import { ChaCha20 } from './chacha20';
 import * as nodeCrypto from 'crypto';
+import { argon2d as hashWasmArgon2d, argon2id as hashWasmArgon2id } from 'hash-wasm';
 
 const EmptySha256 = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
 const EmptySha512 =
@@ -219,7 +220,46 @@ export type Argon2Fn = (
     version: Argon2Version
 ) => Promise<ArrayBuffer>;
 
-let argon2impl: Argon2Fn | undefined;
+async function defaultArgon2Impl(
+    password: ArrayBuffer,
+    salt: ArrayBuffer,
+    memory: number,
+    iterations: number,
+    length: number,
+    parallelism: number,
+    type: Argon2Type,
+    version: Argon2Version
+): Promise<ArrayBuffer> {
+    if (version !== 0x13) {
+        throw new KdbxError(ErrorCodes.Unsupported, 'argon2 version');
+    }
+    const options = {
+        password: new Uint8Array(password),
+        salt: new Uint8Array(salt),
+        memorySize: memory,
+        iterations,
+        parallelism,
+        hashLength: length,
+        outputType: 'binary' as const
+    };
+    let hash: string | Uint8Array;
+    switch (type) {
+        case Argon2TypeArgon2d:
+            hash = await hashWasmArgon2d(options);
+            break;
+        case Argon2TypeArgon2id:
+            hash = await hashWasmArgon2id(options);
+            break;
+        default:
+            throw new KdbxError(ErrorCodes.InvalidArg, 'argon2 type');
+    }
+    if (!(hash instanceof Uint8Array)) {
+        throw new KdbxError(ErrorCodes.InvalidState, 'bad argon2 output');
+    }
+    return arrayToBuffer(hash);
+}
+
+let argon2impl: Argon2Fn | undefined = defaultArgon2Impl;
 
 export function argon2(
     password: ArrayBuffer,

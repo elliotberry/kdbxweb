@@ -1,4 +1,4 @@
-﻿import expect from 'expect.js';
+﻿import expect from '../test-support/expect';
 import { ByteUtils, Consts, CryptoEngine, Int64, KeyEncryptorKdf, VarDictionary } from '../../lib';
 import { ValueType } from '../../lib/utils/var-dictionary';
 
@@ -11,21 +11,28 @@ describe('KeyEncryptorKdf', () => {
     const cryptoEngineArgon2 = CryptoEngine.argon2;
 
     before(() => {
-        CryptoEngine.setArgon2Impl(
-            (password, salt, memory, iterations, length, parallelism, type, version) => {
-                const res = new ArrayBuffer(32);
-                const view = new DataView(res);
-                view.setUint8(0, new Uint8Array(password)[0]);
-                view.setUint8(1, new Uint8Array(salt)[0]);
-                view.setInt16(2, memory);
-                view.setInt8(4, iterations);
-                view.setInt8(5, length);
-                view.setInt8(6, parallelism);
-                view.setInt8(7, type);
-                view.setInt8(8, version);
-                return Promise.resolve(res);
-            }
-        );
+        CryptoEngine.argon2 = (
+            password,
+            salt,
+            memory,
+            iterations,
+            length,
+            parallelism,
+            type,
+            version
+        ) => {
+            const res = new ArrayBuffer(32);
+            const view = new DataView(res);
+            view.setUint8(0, new Uint8Array(password)[0]);
+            view.setUint8(1, new Uint8Array(salt)[0]);
+            view.setInt16(2, memory);
+            view.setInt8(4, iterations);
+            view.setInt8(5, length);
+            view.setInt8(6, parallelism);
+            view.setInt8(7, type);
+            view.setInt8(8, version);
+            return Promise.resolve(res);
+        };
     });
 
     after(() => {
