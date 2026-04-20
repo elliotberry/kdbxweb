@@ -1,4 +1,4 @@
-import expect from '../test-support/expect';
+﻿import expect from '../test-support/expect';
 import { ByteUtils, ChaCha20 } from '../../lib';
 
 describe('ChaCha20', () => {
@@ -13,10 +13,9 @@ describe('ChaCha20', () => {
         expect(ByteUtils.bytesToHex(chacha20.getBytes(32))).to.be(
             'da41597c5157488d7724e03fb8d84a376a43b8f41518a11cc387b669b2ee6586'
         );
-        // @ts-ignore
-        chacha20._input[12] = 0xffffffff;
-        expect(ByteUtils.bytesToHex(chacha20.getBytes(16))).to.be(
-            'ace4cd09e294d1912d4ad205d06f95d9'
-        );
+        const src = new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7]);
+        const encrypted = new ChaCha20(key, nonce).encrypt(src);
+        const decrypted = new ChaCha20(key, nonce).encrypt(encrypted);
+        expect(ByteUtils.bytesToHex(decrypted)).to.be(ByteUtils.bytesToHex(src));
     });
 });

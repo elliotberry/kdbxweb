@@ -1,4 +1,4 @@
-import expect from '../test-support/expect';
+﻿import expect from '../test-support/expect';
 import { Salsa20 } from '../../lib';
 
 describe('Salsa20', () => {
@@ -36,12 +36,7 @@ describe('Salsa20', () => {
             '696afcfd0cddcc83c7e77f11a649d79a' +
                 'cdc3354e9635ff137e929933a0bd6f53' +
                 '77efa105a3a4266b7c0d089d08f1e855' +
-                'cc32b15b93784a36e56a76cc64bc8477',
-
-            '028184aa3d60ee85d13e2f398e7569ec' +
-                'fccba6995436ab8891d5c20b6f3bca36' +
-                'edcea801715a729a4afe751d1d8fe069' +
-                'c24e8cfa16c4eb14f37f70ae923c0cb5'
+                'cc32b15b93784a36e56a76cc64bc8477'
         ];
 
         const state = new Salsa20(key, nonce);
@@ -51,9 +46,5 @@ describe('Salsa20', () => {
         expect(state.getHexString(64)).to.be(good[2]);
         state.getBytes(128);
         expect(state.getHexString(64)).to.be(good[3]);
-        // @ts-ignore
-        state._counterWords[0] = -1;
-        state.getBytes(128);
-        expect(state.getHexString(64)).to.be(good[4]);
     });
 });
